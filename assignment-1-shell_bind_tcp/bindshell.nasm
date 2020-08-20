@@ -1,8 +1,7 @@
-; Filename: bindshell.nasm
-; Author: aus-mate
-; 
-; Purpose: This code was written for assignment #1 of the SecurityTube Linux Assembly Expert certification.
-; Student ID: SLAE-1555
+; Filename: 	bindshell.nasm
+; Author: 	aus-mate 
+; Purpose: 	This code was written for assignment #1 of the SecurityTube Linux Assembly Expert certification.
+; Student ID: 	SLAE-1555
 
 
 global _start
