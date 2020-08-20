@@ -49,7 +49,7 @@ _start:
 	int 0x80		; execute syscall
 
 	
-	; accept4(sockfd, struct sockaddr, addrlen)
+	; accept4(sockfd, struct sockaddr, addrlen, flags)
 	mov ax, 0x16c		; syscall accept
 	xor edx, edx		; Don't care about the client
 	xor esi, esi		; clear esi
