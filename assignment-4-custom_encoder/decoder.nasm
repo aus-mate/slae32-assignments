@@ -33,17 +33,17 @@ not_decode:
 		
 	xor eax, eax		; clear eax
 	mov al, 0x1		; move 1 into eax
-	mov bl, 0x2
-	inc edi			; load the address of the first byte to be replaced
+	mov bl, 0x2		; move 2 into eax for multiplication
+	inc edi			; set edi to the address of the first byte to be replaced
 
 ins_decode:
-	push eax
-	mul bl
-	mov dl, byte[edi + eax]
-	mov byte[edi], dl
-	inc edi
-	pop eax
-	inc eax
+	push eax		; save value of eax onto the stack
+	mul bl			; multiply eax by 2
+	mov dl, byte[edi + eax]	; move desired byte into dl
+	mov byte[edi], dl	; move byte into correct address
+	inc edi			; iterate along shellcode
+	pop eax			; return value of eax
+	inc eax			; increment eax
 	loop ins_decode		; loop until insertions have been removed
 	jmp shellcode		; return control to decoded shellcode
 
