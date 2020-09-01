@@ -15,7 +15,7 @@ print ("\nOriginal: " + "".join("0x%02x," % i for i in shellcode))
 while (len(shellcode) % 16):
         shellcode += b'\x90'
 
-aes_key = urandom(32)
+aes_key = urandom(16)
 init_vec = urandom(16)
 enc_cipher = AES.new(aes_key, AES.MODE_CBC, init_vec)
 dec_cipher = AES.new(aes_key, AES.MODE_CBC, init_vec)
