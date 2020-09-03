@@ -5,6 +5,6 @@ Student ID: SLAE-1555
 
 Course link: https://www.pentesteracademy.com/course?id=3
 
-Each assignment contains a README detailing usage.
+Each assignment contains a README detailing basic usage.
 
 For writeups of each assignment please visit: https://au5.gitbook.io/slae32/
