@@ -19,8 +19,6 @@ dec_cipher = ARC4.new(key)
 
 enc_shellcode = enc_cipher.encrypt(shellcode)
 print("\nKey: " + "".join("0x%02x," % i for i in key))
-print("\nEncrypted: " + "".join("0x%02x," % i for i in enc_shellcode))
 print("\nEncrypted length: " + str(hex(len(enc_shellcode))))
+print("\nEncrypted: " + "".join("0x%02x," % i for i in enc_shellcode))
 
-dec_shellcode = dec_cipher.decrypt(enc_shellcode)
-print("\nDecrypted: " + "".join("0x%02x," % i for i in dec_shellcode))
