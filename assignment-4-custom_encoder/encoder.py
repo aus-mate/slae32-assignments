@@ -32,6 +32,6 @@ for i in not_encoded:
 
 enc_shellcode += b'\xaa'
 
-print("\nEncoded: " + "\"" + "".join("\\x%02x" % i for i in enc_shellcode) + "\"")
+# print("\nEncoded: " + "\"" + "".join("\\x%02x" % i for i in enc_shellcode) + "\"")
 print("\nEncoded: " + "".join("0x%02x," % i for i in enc_shellcode))
 
