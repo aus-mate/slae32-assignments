@@ -27,14 +27,14 @@ _start:
 	; edx will point to S[0]
 	; ecx will be i
 	xor ecx, ecx		; clear ecx register 
-	mov edx, esp		; point edx at the esp
-	dec edx				; decrement to the first byte of the S array
+	mov ecx, 255		; move 255 into ecx
 s_arr:	
 	mov byte[esp-1], cl	; push bytes onto the stack to populate S array
 	dec esp				; adjust stack
-	inc ecx				; increment ecx
-	cmp ecx, 256		; loop for (i = 0; i < 256; i++)
-	jne s_arr
+	loop s_arr			; loop to fill S array
+	mov byte[esp-1], cl ; append 0x00 onto the stack for S[0]
+	dec esp				; adjust stack
+	mov edx, esp		; point edx at the esp
 
 
     ;	for (i = j = 0; i < 256; i++) {
@@ -46,15 +46,11 @@ s_arr:
     ; edx will point to S[0]
     ; eax will point to S[i]
 	; ecx will be i
-	; ebx will be j
-	xor ecx, ecx		; clear registers for entry to for loop
-	xor ebx, ebx
+	; ebx will be j		
+	xor ebx, ebx		; clear registers for entry to for loop
 	xor eax, eax
-
-	; DOESNT WORK EDX IS BACKWARDS switch to minus?
 init:
-	add ebx, ebx		; + j
-	lea eax, [edx+ecx]	; load the address of S[i]
+	lea eax, [edx + ecx]; load the address of S[i]
 	add bl, byte[eax] 	; + S[i]
 	push ecx			; store ecx
 	and ecx, 15			; i % key_length (i % 16)
@@ -81,7 +77,6 @@ jmp_call_pop_key:
 	inc ecx				; increment for loop
 	cmp ecx, 256		; condition
 	jne init
-
 
 
 load_key:
