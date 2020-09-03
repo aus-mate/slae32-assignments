@@ -9,16 +9,18 @@ section .text
 
 _start:
 
-	;void rc4_init(unsigned char *key, unsigned int key_length) {
-    ;	for (i = 0; i < 256; i++)
-  	;      		S[i] = i;
+	;Key Scheduling Algorithm
+	;
+    ;for (i = 0; i < 256; i++){
+  	;   S[i] = i;
+  	;}
  	;
-    ;	for (i = j = 0; i < 256; i++) {
-    ;		j = (j + key[i % key_length] + S[i]) & 255;
-    ;		swap(S[i] <-> S[j]);
-    ;	}
-    ;	i = j = 0;
-	;}
+    ;for (i = j = 0; i < 256; i++) {
+    ;	j = (j + key[i % key_length] + S[i]) & 255;
+    ;	swap(S[i] <-> S[j]);
+    ;}
+    ;i = j = 0;
+	;
 	 
 
 	;	for (i = 0; i < 256; i++)
@@ -77,6 +79,31 @@ jmp_call_pop_key:
 	inc ecx				; increment for loop
 	cmp ecx, 256		; condition
 	jne init
+	xor ecx, ecx		; i = 0
+	xor ebx, ebx		; j = 0
+
+	; Psuedo-Random Generation Algorithm
+	; while(length of data){
+	;	i = (i + 1) % 256
+	;	j = (j + S[i]) % 256
+	;	swap(S[i] <-> S[j])
+	;	keystream = S[(S[i]+ S[j]) % 256]
+	;}
+	; edx will point to S[0]
+	; eax will point to S[i]
+	; ecx will be i
+	; ebx will be j
+
+
+
+
+
+
+	; Decrypt (encrypted data XOR keystream)
+	; for (i = 0; i < length of data; i++) {
+	; 	shellcode[i] ^ keystream[i]
+	;}
+	;call shellcode
 
 
 load_key:
