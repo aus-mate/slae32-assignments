@@ -7,4 +7,4 @@
 2. Execute:
     * `./tiny_read_poly` - Will execute `cat /etc/passwd`
     * `./execve_poly` - Will execute `/bin/sh`
-    * `./chmod_poly` & `./chmod_shortened` - Will `chmod 0666 /etc/shadow`
+    * `sudo ./chmod_poly` & `sudo ./chmod_shortened` - Will `chmod 0666 /etc/shadow`
