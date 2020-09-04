@@ -15,8 +15,6 @@ print ("\nOriginal: " + "".join("0x%02x," % i for i in shellcode))
 key = urandom(16)
 enc_cipher = ARC4.new(key)
 
-dec_cipher = ARC4.new(key)
-
 enc_shellcode = enc_cipher.encrypt(shellcode)
 print("\nKey: " + "".join("0x%02x," % i for i in key))
 print("\nEncrypted length: " + str(hex(len(enc_shellcode))))
