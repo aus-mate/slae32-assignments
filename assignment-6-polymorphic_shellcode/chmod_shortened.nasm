@@ -1,4 +1,4 @@
-; Filename:	chmod_poly.nasm
+; Filename:	chmod_shortened.nasm
 ; Author:	aus-mate
 ; Purpose:	This code was written for assignment #6 of the SecurityTube Linux Assembly Expert certification.
 ; Student ID:	SLAE-1555
