@@ -64,8 +64,8 @@ init:
 	pop esi
 	and ebx, 255			; % 256
 	xor ecx, ecx
-	mov ch, byte[edx + ebx]		; move the byte at S[j] into edx
-	mov cl, byte[edx + esi]		; move the byte at S[i] into ebx 
+	mov ch, byte[edx + ebx]		; move the byte at S[j] into ch
+	mov cl, byte[edx + esi]		; move the byte at S[i] into cl 
 	mov byte[edx + esi], ch		; move the byte at S[j] into S[i]
 	mov byte[edx + ebx], cl		; move the byte that was stored at S[i] into S[j] 
 	inc esi				; increment for loop
@@ -134,10 +134,10 @@ prga:
 jmp_call_pop_sc:
 	pop ebx				; pop address of shellcode[0] into ebx
 decrypt:	
-	xor edx, edx			; clear eax
-	xor ecx, ecx			; clear ebx
-	mov dl, byte[ebx+esi]		; move byte at shellcode[i] into eax
-	mov cl, byte[eax+esi]		; move byte at keystream[i] into ebx
+	xor edx, edx			; clear edx
+	xor ecx, ecx			; clear ecx
+	mov dl, byte[ebx+esi]		; move byte at shellcode[i] into edx
+	mov cl, byte[eax+esi]		; move byte at keystream[i] into ecx
 	xor edx, ecx			; xor the bytes
 	mov byte[ebx+esi], dl 		; replace the byte at shellcode[i]
 	inc esi				; increment count
